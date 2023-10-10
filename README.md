@@ -9,7 +9,7 @@ CREATE TABLE Users (
     LastName VARCHAR(50),
     Email VARCHAR(100) UNIQUE,
     Phone VARCHAR(15),
-    PasswordHash VARCHAR(255) -- Hashed and salted password
+    Password VARCHAR(255) 
 );
 
 -- Restaurants table to store restaurant information
