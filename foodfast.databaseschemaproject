@@ -1,15 +1,15 @@
-#foodfast
+# foodfast
 
--- Define tables for the database schema
 
--- Customers table to store customer information
-CREATE TABLE Customers (
-    CustomerID INT PRIMARY KEY,
+
+-- Users table to store user information
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY,
     FirstName VARCHAR(50),
     LastName VARCHAR(50),
     Email VARCHAR(100) UNIQUE,
     Phone VARCHAR(15),
-    Address VARCHAR(255)
+    PasswordHash VARCHAR(255) -- Hashed and salted password
 );
 
 -- Restaurants table to store restaurant information
@@ -27,18 +27,17 @@ CREATE TABLE MenuItems (
     RestaurantID INT,
     Name VARCHAR(100),
     Description TEXT,
-    Price DECIMAL(5, 2),
-    FOREIGN KEY (RestaurantID) REFERENCES Restaurants(RestaurantID)
+    Price DECIMAL(5, 2)
 );
 
 -- Orders table to store customer orders
 CREATE TABLE Orders (
     OrderID INT PRIMARY KEY,
-    CustomerID INT,
+    UserID INT,
+    RestaurantID INT,
     OrderDate TIMESTAMP,
     TotalAmount DECIMAL(8, 2),
-    Status VARCHAR(20),
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+    Status VARCHAR(20)
 );
 
 -- OrderItems table to store items within each order
@@ -47,9 +46,7 @@ CREATE TABLE OrderItems (
     OrderID INT,
     MenuItemID INT,
     Quantity INT,
-    Subtotal DECIMAL(8, 2),
-    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
-    FOREIGN KEY (MenuItemID) REFERENCES MenuItems(MenuItemID)
+    Subtotal DECIMAL(8, 2)
 );
 
 -- DeliveryDrivers table to store information about delivery drivers
@@ -67,9 +64,7 @@ CREATE TABLE DeliveryAssignments (
     OrderID INT,
     DriverID INT,
     AssignmentTime TIMESTAMP,
-    Status VARCHAR(20),
-    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
-    FOREIGN KEY (DriverID) REFERENCES DeliveryDrivers(DriverID)
+    Status VARCHAR(20)
 );
 
 -- Payments table to store payment information
@@ -78,10 +73,16 @@ CREATE TABLE Payments (
     OrderID INT,
     PaymentAmount DECIMAL(8, 2),
     PaymentDate TIMESTAMP,
-    PaymentStatus VARCHAR(20),
-    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+    PaymentStatus VARCHAR(20)
 );
 
--- Add additional tables as needed for reviews, user authentication, and more.
+-- Reviews table to store restaurant reviews
+CREATE TABLE Reviews (
+    ReviewID INT PRIMARY KEY,
+    UserID INT,
+    RestaurantID INT,
+    Rating DECIMAL(3, 2),
+    Comment TEXT,
+    ReviewDate TIMESTAMP
+);
 
--- Indexes, constraints, and triggers can be added for data integrity and performance optimization.
